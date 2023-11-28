@@ -33,23 +33,24 @@ public:
     const std::string & topic,
     const std::string & ns = "",
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
-    : rclcpp_lifecycle::LifecycleNode(node_name, ns, options)
-    {
-      sub_ = this->create_subscription<TopicT>(
-        topic, 10,
-        [this](const typename TopicT::SharedPtr msg) {
-          if (pub_) {
-              
-            pub_->publish(std::make_unique<TopicT>(*msg));
-          }
-        });
+  : rclcpp_lifecycle::LifecycleNode(node_name, ns, options)
+  {
+    sub_ = this->create_subscription<TopicT>(
+      topic, 10,
+      [this](const typename TopicT::SharedPtr msg) {
+        if (pub_) {
 
-      pub_ = this->create_publisher<TopicT>(ns + topic, 10);
+          pub_->publish(std::make_unique<TopicT>(*msg));
+        }
+      });
 
-      RCLCPP_INFO(get_logger(), "Creating InstrumentationLifecycleNode");
-    }
+    pub_ = this->create_publisher<TopicT>(ns + topic, 10);
 
-  virtual ~InstrumentationLifecycleNode() {
+    RCLCPP_INFO(get_logger(), "Creating InstrumentationLifecycleNode");
+  }
+
+  virtual ~InstrumentationLifecycleNode()
+  {
     RCLCPP_INFO(get_logger(), "Destroying InstrumentationLifecycleNode");
   }
 
@@ -86,7 +87,7 @@ private:
     return CallbackReturnT::SUCCESS;
   }
 
-  void process() override { }
+  void process() override {}
 
   typename rclcpp::Subscription<TopicT>::SharedPtr sub_;
   typename rclcpp::Publisher<TopicT>::SharedPtr pub_;
