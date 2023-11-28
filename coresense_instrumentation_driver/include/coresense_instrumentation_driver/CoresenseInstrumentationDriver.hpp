@@ -29,7 +29,14 @@ public:
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
   virtual ~CoresenseInstrumentationDriver();
 
+  int getNumberOfNodes();
+  void newNode(const std::string & topic, const std::string & topic_type);
+  void removeNode(const std::string & topic);
+
 private:
+  void initializeNodes();
+  void addNode(const std::string & topic, const std::string & topic_type);
+
   rclcpp::executors::MultiThreadedExecutor executor_;
   std::vector<std::shared_ptr<ICell>> nodes_;
   std::vector<std::string> topics_;

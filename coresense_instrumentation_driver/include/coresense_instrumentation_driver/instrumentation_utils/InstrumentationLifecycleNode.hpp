@@ -35,8 +35,13 @@ public:
     const rclcpp::NodeOptions & options = rclcpp::NodeOptions())
   : rclcpp_lifecycle::LifecycleNode(node_name, ns, options)
   {
+    set_name(node_name);
+    set_topic(topic);
+    set_node_base_interface(this->get_node_base_interface());
+    topic_ = topic;
+
     sub_ = this->create_subscription<TopicT>(
-      topic, 10,
+      topic_, 10,
       [this](const typename TopicT::SharedPtr msg) {
         if (pub_) {
 
@@ -44,7 +49,7 @@ public:
         }
       });
 
-    pub_ = this->create_publisher<TopicT>(ns + topic, 10);
+    pub_ = this->create_publisher<TopicT>(ns + topic_, 10);
 
     RCLCPP_INFO(get_logger(), "Creating InstrumentationLifecycleNode");
   }
@@ -52,6 +57,16 @@ public:
   virtual ~InstrumentationLifecycleNode()
   {
     RCLCPP_INFO(get_logger(), "Destroying InstrumentationLifecycleNode");
+  }
+
+  std::string get_name()
+  {
+    return this->get_name();
+  }
+
+  std::string get_topic()
+  {
+    return topic_;
   }
 
 private:
@@ -91,6 +106,7 @@ private:
 
   typename rclcpp::Subscription<TopicT>::SharedPtr sub_;
   typename rclcpp::Publisher<TopicT>::SharedPtr pub_;
+  std::string topic_;
 };
 
 } // namespace coresense_instrumentation_driver
