@@ -16,10 +16,11 @@
 #define CORESENSE_INSTRUMENTATION_DRIVER_HPP
 
 #include "rclcpp/rclcpp.hpp"
+#include "coresense_instrumentation_driver/instrumentation_utils/InstrumentationLifecycleNode.hpp"
+
 
 namespace coresense_instrumentation_driver
 {
-
 
 class CoresenseInstrumentationDriver : public rclcpp::Node
 {
@@ -29,7 +30,11 @@ public:
   virtual ~CoresenseInstrumentationDriver();
 
 private:
-
+  rclcpp::executors::MultiThreadedExecutor executor_;
+  std::vector<std::shared_ptr<ICell>> nodes_;
+  std::vector<std::string> topics_;
+  std::vector<std::string> topic_types_;
+  std::unique_ptr<std::thread> thread_;
 };
 
 } // namespace coresense_instrumentation_driver

@@ -4,7 +4,7 @@
   <name>coresense_instrumentation_driver</name>
   <version>0.0.0</version>
   <description>Coresense Instrumentation Driver</description>
-  <maintainer email="jc.manzanares.serrano@gmail.com">juanca</maintainer>
+  <maintainer email="jc.manzanares.serrano@gmail.com">Juan Carlos Manzanares Serrano</maintainer>
   <license>Apache-2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

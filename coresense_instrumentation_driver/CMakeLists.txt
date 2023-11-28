@@ -8,45 +8,52 @@ endif()
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED)
+find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp_components REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
 
 set(dependencies
   rclcpp
-  std_msgs
   rclcpp_components
+  rclcpp_lifecycle
+  std_msgs
+  sensor_msgs
 )
 
 include_directories(include)
 
-add_library(${PROJECT_NAME}_lib SHARED
+add_library(${PROJECT_NAME} SHARED
   src/coresense_instrumentation_driver/CoresenseInstrumentationDriver.cpp
 )
-ament_target_dependencies(${PROJECT_NAME}_lib ${dependencies})
+ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 add_executable(coresense_instrumentation_driver_node src/coresense_instrumentation_driver_node.cpp)
 ament_target_dependencies(coresense_instrumentation_driver_node ${dependencies})
-target_link_libraries(coresense_instrumentation_driver_node ${PROJECT_NAME}_lib)
+target_link_libraries(coresense_instrumentation_driver_node ${PROJECT_NAME})
 
-rclcpp_components_register_nodes(${PROJECT_NAME}_lib
-    PLUGIN "node_handler::ExampleNode"
+rclcpp_components_register_nodes(${PROJECT_NAME}
+    PLUGIN "coresense_instrumentation_driver::CoresenseInstrumentationDriver"
+    EXECUTABLE coresense_instrumentation_driver_node
 )
 
 install(TARGETS
-  ${PROJECT_NAME}_lib
+  ${PROJECT_NAME}
   coresense_instrumentation_driver_node
   ARCHIVE DESTINATION lib
   LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}_lib
+  RUNTIME DESTINATION lib/${PROJECT_NAME}
 )
 
 install(DIRECTORY include/
   DESTINATION include
 )
 
+install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
+
 ament_export_include_directories(include)
 ament_export_dependencies(${dependencies})
-ament_export_libraries(${PROJECT_NAME}_lib)
+ament_export_libraries(${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
