@@ -24,8 +24,8 @@ def generate_launch_description():
         plugin='coresense_instrumentation_driver::CoresenseInstrumentationDriver',
         name='coresense_instrumentation_driver_node',
         namespace='coresense',
-        parameters=[{"topics": ["/scan", "/chatter"],
-                     "topic_types": ["sensor_msgs/msg/LaserScan", "std_msgs/msg/String"]}],
+        parameters=[{'topics': ['/scan', '/chatter'],
+                     'topic_types': ['sensor_msgs/msg/LaserScan', 'std_msgs/msg/String']}],
     )
 
     container = ComposableNodeContainer(
