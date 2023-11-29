@@ -13,15 +13,38 @@
 // limitations under the License.
 
 #include <rclcpp/rclcpp.hpp>
-#include "coresense_instrumentation_driver/CoresenseInstrumentationDriver.hpp"
+#include "coresense_instrumentation_driver/InstrumentationLifecycleNode.hpp"
 
 int main(int argc, char * argv[])
 {
   rclcpp::init(argc, argv);
 
-  auto node = std::make_shared<coresense_instrumentation_driver::CoresenseInstrumentationDriver>();
+  if (argc < 3) {
+    RCLCPP_INFO(rclcpp::get_logger("main"), "Usage: %s <topic> <topic_type>", argv[0]);
+    return 1;
+  }
 
-  rclcpp::spin(node);
+  std::string topic = argv[1];
+  std::string topic_type = argv[2];
+
+  auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
+
+  if (topic_type == "std_msgs::msg::String") {
+    auto node =
+      std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>();
+
+    executor->add_node(node->get_node_base_interface());
+    executor->spin();
+  } else if (topic_type == "sensor_msgs::msg::LaserScan") {
+    auto node =
+      std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>>();
+
+    executor->add_node(node->get_node_base_interface());
+    executor->spin();
+  } else {
+    RCLCPP_INFO(rclcpp::get_logger("main"), "Usage: %s <topic> <topic_type>", argv[0]);
+    return 1;
+  }
 
   rclcpp::shutdown();
   return 0;

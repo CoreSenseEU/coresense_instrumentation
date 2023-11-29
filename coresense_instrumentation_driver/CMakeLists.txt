@@ -24,36 +24,38 @@ set(dependencies
 include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
-  src/coresense_instrumentation_driver/CoresenseInstrumentationDriver.cpp
+  src/coresense_instrumentation_driver/InstrumentationLifecycleNode.cpp  #
 )
+
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
-add_executable(coresense_instrumentation_driver_node src/coresense_instrumentation_driver_node.cpp)
-ament_target_dependencies(coresense_instrumentation_driver_node ${dependencies})
-target_link_libraries(coresense_instrumentation_driver_node ${PROJECT_NAME})
-
 rclcpp_components_register_nodes(${PROJECT_NAME}
-    PLUGIN "coresense_instrumentation_driver::CoresenseInstrumentationDriver"
-    EXECUTABLE coresense_instrumentation_driver_node
+  "coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>"
+  "coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>"
 )
 
 install(TARGETS
   ${PROJECT_NAME}
-  coresense_instrumentation_driver_node
-  ARCHIVE DESTINATION lib
-  LIBRARY DESTINATION lib
-  RUNTIME DESTINATION lib/${PROJECT_NAME}
+  DESTINATION lib
 )
 
 install(DIRECTORY include/
   DESTINATION include
 )
 
+add_executable(coresense_instrumentation_driver_node src/coresense_instrumentation_driver_node.cpp)
+ament_target_dependencies(coresense_instrumentation_driver_node ${dependencies})
+target_link_libraries(coresense_instrumentation_driver_node ${PROJECT_NAME})
+
+install(TARGETS
+  coresense_instrumentation_driver_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(DIRECTORY launch config DESTINATION share/${PROJECT_NAME})
 
 ament_export_include_directories(include)
 ament_export_dependencies(${dependencies})
-ament_export_libraries(${PROJECT_NAME})
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
