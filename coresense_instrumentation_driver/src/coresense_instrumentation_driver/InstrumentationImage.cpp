@@ -29,36 +29,38 @@ InstrumentationLifecycleNode<sensor_msgs::msg::Image>::InstrumentationLifecycleN
   get_parameter("topic", topic_);
   get_parameter("topic_type", topic_type_);
 
+  node_ = rclcpp::Node::make_shared("subnode");
+
   RCLCPP_INFO(get_logger(), "Creating InstrumentationImage");
 }
-
 
 InstrumentationLifecycleNode<sensor_msgs::msg::Image>::~InstrumentationLifecycleNode()
 {
   RCLCPP_DEBUG(get_logger(), "Destroying InstrumentationImage");
 }
 
-std::string InstrumentationLifecycleNode<sensor_msgs::msg::Image>::get_topic()
+void InstrumentationLifecycleNode<sensor_msgs::msg::Image>::imageCallback(
+  const sensor_msgs::msg::Image::ConstSharedPtr & msg)
 {
-  return topic_;
-}
-
-
-std::string InstrumentationLifecycleNode<sensor_msgs::msg::Image>::get_topic_type()
-{
-  return topic_type_;
+  if (pub_ && pub_.getNumSubscribers() > 0) {
+    pub_.publish(msg);
+  }
 }
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_configure(const rclcpp_lifecycle::State &)
 {
-  sub_ = this->create_subscription<sensor_msgs::msg::Image>(
-    topic_, 10,
-    [this](const sensor_msgs::msg::Image::SharedPtr msg) {
-      if (pub_) {
-        // pub_->publish(msg);
-      }
-    });
+  auto subscription_options = rclcpp::SubscriptionOptions();
+
+  sub_ = image_transport::create_subscription(
+    node_.get(),
+    topic_,
+    std::bind(
+      &InstrumentationLifecycleNode<sensor_msgs::msg::Image>::imageCallback, this,
+      std::placeholders::_1),
+    "raw",
+    rmw_qos_profile_sensor_data,
+    subscription_options);
 
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
@@ -66,12 +68,11 @@ InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_configure(const rclcpp
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_activate(const rclcpp_lifecycle::State &)
 {
-  // image_transport::ImageTransport it(this->get_node_base_interface());
-  // pub_ = it.advertise(topic_, 1);
+  image_transport::ImageTransport it(node_);
+  pub_ = it.advertise("/coresense" + topic_, 1);
 
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
-
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_deactivate(
@@ -80,22 +81,26 @@ InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_deactivate(
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
 
-
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_cleanup(const rclcpp_lifecycle::State &)
 {
-  sub_.reset();
-
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
 }
-
 
 rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn
 InstrumentationLifecycleNode<sensor_msgs::msg::Image>::on_shutdown(const rclcpp_lifecycle::State &)
 {
-  sub_.reset();
-
   return rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn::SUCCESS;
+}
+
+std::string InstrumentationLifecycleNode<sensor_msgs::msg::Image>::get_topic()
+{
+  return topic_;
+}
+
+std::string InstrumentationLifecycleNode<sensor_msgs::msg::Image>::get_topic_type()
+{
+  return topic_type_;
 }
 
 } // namespace coresense_instrumentation_driver

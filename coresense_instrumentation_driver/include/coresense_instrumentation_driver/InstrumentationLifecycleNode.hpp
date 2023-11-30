@@ -25,6 +25,8 @@
 namespace coresense_instrumentation_driver
 {
 
+using std::placeholders::_1;
+
 template<typename TopicT>
 class InstrumentationLifecycleNode : public rclcpp_lifecycle::LifecycleNode
 {
@@ -61,9 +63,6 @@ public:
 
   virtual ~InstrumentationLifecycleNode();
 
-  std::string get_topic();
-  std::string get_topic_type();
-
   using CallbackReturnT = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
 
   CallbackReturnT on_configure(const rclcpp_lifecycle::State &) override;
@@ -72,9 +71,15 @@ public:
   CallbackReturnT on_cleanup(const rclcpp_lifecycle::State &) override;
   CallbackReturnT on_shutdown(const rclcpp_lifecycle::State &) override;
 
+  std::string get_topic();
+  std::string get_topic_type();
+
 private:
+  void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg);
+
+  rclcpp::Node::SharedPtr node_;
   image_transport::Publisher pub_;
-  typename rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr sub_;
+  image_transport::Subscriber sub_;
   std::string topic_;
   std::string topic_type_;
 };
