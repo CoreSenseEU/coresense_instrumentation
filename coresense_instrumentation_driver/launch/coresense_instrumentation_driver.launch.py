@@ -19,9 +19,9 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
 
-    names = ['scan', 'chatter']
-    topics = ['/scan', '/chatter']
-    types = ['sensor_msgs::msg::LaserScan', 'std_msgs::msg::String']
+    names = ['scan', 'chatter', 'image']
+    topics = ['/scan', '/chatter', '/image']
+    types = ['sensor_msgs::msg::LaserScan', 'std_msgs::msg::String', 'sensor_msgs::msg::Image']
 
     composable_nodes = []
     for topic, topic_type, name in zip(topics, types, names):

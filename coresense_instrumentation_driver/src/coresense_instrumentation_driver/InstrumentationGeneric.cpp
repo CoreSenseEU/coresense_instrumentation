@@ -14,16 +14,17 @@
 
 #include "coresense_instrumentation_driver/InstrumentationLifecycleNode.hpp"
 
-template class coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>;
-template class coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>;
 
 namespace coresense_instrumentation_driver
 {
 
+template class coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>;
+template class coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>;
+
 template<typename TopicT>
 InstrumentationLifecycleNode<TopicT>::InstrumentationLifecycleNode(
   const rclcpp::NodeOptions & options)
-: rclcpp_lifecycle::LifecycleNode("InstrumentationLifecycleNode", "", options)
+: rclcpp_lifecycle::LifecycleNode("lifecycle_node", "", options)
 {
   declare_parameter("topic", std::string(""));
   declare_parameter("topic_type", std::string(""));
@@ -31,13 +32,13 @@ InstrumentationLifecycleNode<TopicT>::InstrumentationLifecycleNode(
   get_parameter("topic", topic_);
   get_parameter("topic_type", topic_type_);
 
-  RCLCPP_DEBUG(get_logger(), "Creating InstrumentationLifecycleNode");
+  RCLCPP_INFO(get_logger(), "Creating InstrumentationGeneric");
 }
 
 template<typename TopicT>
 InstrumentationLifecycleNode<TopicT>::~InstrumentationLifecycleNode()
 {
-  RCLCPP_DEBUG(get_logger(), "Destroying InstrumentationLifecycleNode");
+  RCLCPP_DEBUG(get_logger(), "Destroying InstrumentationGeneric");
 }
 
 template<typename TopicT>

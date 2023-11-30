@@ -12,6 +12,7 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(image_transport REQUIRED)
 
 set(dependencies
   rclcpp
@@ -19,12 +20,14 @@ set(dependencies
   rclcpp_lifecycle
   std_msgs
   sensor_msgs
+  image_transport
 )
 
 include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
-  src/coresense_instrumentation_driver/InstrumentationLifecycleNode.cpp  #
+  src/coresense_instrumentation_driver/InstrumentationGeneric.cpp
+  src/coresense_instrumentation_driver/InstrumentationImage.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
@@ -32,6 +35,7 @@ ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 rclcpp_components_register_nodes(${PROJECT_NAME}
   "coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>"
   "coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>"
+  "coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::Image>"
 )
 
 install(TARGETS

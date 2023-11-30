@@ -19,9 +19,13 @@
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
 #include "std_msgs/msg/string.hpp"
 #include "sensor_msgs/msg/laser_scan.hpp"
+#include "sensor_msgs/msg/image.hpp"
+#include "image_transport/image_transport.hpp"
 
 namespace coresense_instrumentation_driver
 {
+
+using std::placeholders::_1;
 
 template<typename TopicT>
 class InstrumentationLifecycleNode : public rclcpp_lifecycle::LifecycleNode
@@ -46,6 +50,36 @@ public:
 private:
   typename rclcpp::Subscription<TopicT>::SharedPtr sub_;
   typename rclcpp_lifecycle::LifecyclePublisher<TopicT>::SharedPtr pub_;
+  std::string topic_;
+  std::string topic_type_;
+};
+
+template<>
+class InstrumentationLifecycleNode<sensor_msgs::msg::Image>: public rclcpp_lifecycle::LifecycleNode
+{
+public:
+  InstrumentationLifecycleNode(
+    const rclcpp::NodeOptions & options = rclcpp::NodeOptions());
+
+  virtual ~InstrumentationLifecycleNode();
+
+  using CallbackReturnT = rclcpp_lifecycle::node_interfaces::LifecycleNodeInterface::CallbackReturn;
+
+  CallbackReturnT on_configure(const rclcpp_lifecycle::State &) override;
+  CallbackReturnT on_activate(const rclcpp_lifecycle::State &) override;
+  CallbackReturnT on_deactivate(const rclcpp_lifecycle::State &) override;
+  CallbackReturnT on_cleanup(const rclcpp_lifecycle::State &) override;
+  CallbackReturnT on_shutdown(const rclcpp_lifecycle::State &) override;
+
+  std::string get_topic();
+  std::string get_topic_type();
+
+private:
+  void imageCallback(const sensor_msgs::msg::Image::ConstSharedPtr & msg);
+
+  rclcpp::Node::SharedPtr node_;
+  image_transport::Publisher pub_;
+  image_transport::Subscriber sub_;
   std::string topic_;
   std::string topic_type_;
 };
