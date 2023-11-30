@@ -29,20 +29,23 @@ int main(int argc, char * argv[])
 
   auto executor = std::make_shared<rclcpp::executors::SingleThreadedExecutor>();
 
-  if (topic_type == "std_msgs::msg::String") {
-    auto node =
-      std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>();
-
-    executor->add_node(node->get_node_base_interface());
-    executor->spin();
-  } else if (topic_type == "sensor_msgs::msg::LaserScan") {
+  if (topic_type == "sensor_msgs/msg/LaserScan") {
     auto node =
       std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>>();
-
+    executor->add_node(node->get_node_base_interface());
+    executor->spin();
+  } else if (topic_type == "std_msgs/msg/String") {
+    auto node =
+      std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>();
+    executor->add_node(node->get_node_base_interface());
+    executor->spin();
+  } else if (topic_type == "sensor_msgs/msg/Image") {
+    auto node =
+      std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::Image>>();
     executor->add_node(node->get_node_base_interface());
     executor->spin();
   } else {
-    RCLCPP_INFO(rclcpp::get_logger("main"), "Usage: %s <topic> <topic_type>", argv[0]);
+    RCLCPP_ERROR(rclcpp::get_logger("main"), "Unknown topic type: %s", topic_type.c_str());
     return 1;
   }
 
