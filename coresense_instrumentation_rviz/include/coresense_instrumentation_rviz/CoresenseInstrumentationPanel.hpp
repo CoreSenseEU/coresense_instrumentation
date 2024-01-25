@@ -28,6 +28,7 @@
 #include <QThread>
 #include <QApplication>
 #include <QMessageBox>
+#include <QTabWidget>
 
 #undef NO_ERROR
 
@@ -65,9 +66,10 @@ public:
   void onInitialize() override;
 
 protected:
-  QVBoxLayout * layout;
+  QVBoxLayout * layout_;
   QTreeWidget * tree_widget_;
   QLabel * label_info_;
+  QTabWidget * tab_widget_;
 
 private slots:
   void show_info(QTreeWidgetItem * item);

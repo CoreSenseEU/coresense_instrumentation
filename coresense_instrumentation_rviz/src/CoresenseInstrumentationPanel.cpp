@@ -36,9 +36,12 @@ CoresensePanel::CoresensePanel(QWidget * parent)
 {
   node_ = rclcpp::Node::make_shared("coresense_instrumentation_rviz_panel");
 
-  layout = new QVBoxLayout;
+  tab_widget_ = new QTabWidget();
 
-  // Crear un tree widget
+  QWidget* panel_tab = new QWidget();
+
+  QVBoxLayout* panel_layout = new QVBoxLayout(panel_tab);
+
   tree_widget_ = new QTreeWidget();
   tree_widget_->setColumnCount(3);
   tree_widget_->setHeaderLabels({"Node", "State", "Type"});
@@ -46,18 +49,26 @@ CoresensePanel::CoresensePanel(QWidget * parent)
   tree_widget_->header()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
   tree_widget_->header()->setSectionResizeMode(2, QHeaderView::ResizeToContents);
   tree_widget_->clear();
-  layout->addWidget(tree_widget_);
+  panel_layout->addWidget(tree_widget_);
 
-  // Crear un label
   label_info_ = new QLabel();
-  layout->addWidget(label_info_);
+  panel_layout->addWidget(label_info_);
 
   connect(
     tree_widget_, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this,
     SLOT(show_info(QTreeWidgetItem*)));
 
-  // Establecer el diseño del panel
-  setLayout(layout);
+  panel_tab->setLayout(panel_layout);
+  tab_widget_->addTab(panel_tab, "Panel");
+
+  QWidget* control_tab = new QWidget();
+  QVBoxLayout* control_layout = new QVBoxLayout(control_tab);
+  control_tab->setLayout(control_layout);
+  tab_widget_->addTab(control_tab, "Control");
+
+  layout_ = new QVBoxLayout();
+  layout_->addWidget(tab_widget_);
+  setLayout(layout_);
 
   status_sub_ = node_->create_subscription<coresense_instrumentation_interfaces::msg::NodeInfo>(
     "/status", 10, std::bind(&CoresensePanel::statusCallback, this, std::placeholders::_1));
