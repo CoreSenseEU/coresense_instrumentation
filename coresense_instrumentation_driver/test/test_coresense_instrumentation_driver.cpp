@@ -4,7 +4,7 @@
 #include <sensor_msgs/msg/laser_scan.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <std_msgs/msg/string.hpp>
-#include "coresense_instrumentation_driver/InstrumentationLifecycleNode.hpp"
+#include "coresense_instrumentation_driver/InstrumentationProducer.hpp"
 
 class IntegrationTest : public ::testing::Test
 {
@@ -25,7 +25,7 @@ TEST_F(IntegrationTest, LaserScanNodeLifecycle)
   rclcpp::executors::SingleThreadedExecutor executor;
 
   auto node =
-    std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>>(
+    std::make_shared<coresense_instrumentation_driver::InstrumentationProducer<sensor_msgs::msg::LaserScan>>(
     rclcpp::NodeOptions().append_parameter_override(
       "topic",
       "/test_topic").append_parameter_override(
@@ -67,7 +67,7 @@ TEST_F(IntegrationTest, StringNodeLifecycle)
   rclcpp::executors::SingleThreadedExecutor executor;
 
   auto node =
-    std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>(
+    std::make_shared<coresense_instrumentation_driver::InstrumentationProducer<std_msgs::msg::String>>(
     rclcpp::NodeOptions().append_parameter_override(
       "topic",
       "/test_topic").append_parameter_override(
@@ -109,7 +109,7 @@ TEST_F(IntegrationTest, ImageNodeLifecycle)
   rclcpp::executors::SingleThreadedExecutor executor;
 
   auto node =
-    std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>(
+    std::make_shared<coresense_instrumentation_driver::InstrumentationProducer<std_msgs::msg::String>>(
     rclcpp::NodeOptions().append_parameter_override(
       "topic",
       "/test_topic").append_parameter_override(
@@ -149,7 +149,7 @@ TEST_F(IntegrationTest, ImageNodeLifecycle)
 TEST_F(IntegrationTest, GetTopic)
 {
   auto node =
-    std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>(
+    std::make_shared<coresense_instrumentation_driver::InstrumentationProducer<std_msgs::msg::String>>(
     rclcpp::NodeOptions().append_parameter_override(
       "topic",
       "/test_topic").append_parameter_override(
@@ -161,7 +161,7 @@ TEST_F(IntegrationTest, GetTopic)
 TEST_F(IntegrationTest, GetTopicType)
 {
   auto node =
-    std::make_shared<coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>>(
+    std::make_shared<coresense_instrumentation_driver::InstrumentationProducer<std_msgs::msg::String>>(
     rclcpp::NodeOptions().append_parameter_override(
       "topic",
       "/test_topic").append_parameter_override(

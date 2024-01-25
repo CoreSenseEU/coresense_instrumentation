@@ -12,7 +12,9 @@ find_package(rclcpp_lifecycle REQUIRED)
 find_package(rclcpp_components REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
 find_package(image_transport REQUIRED)
+find_package(coresense_instrumentation_interfaces REQUIRED)
 
 set(dependencies
   rclcpp
@@ -20,22 +22,30 @@ set(dependencies
   rclcpp_lifecycle
   std_msgs
   sensor_msgs
+  geometry_msgs
   image_transport
+  coresense_instrumentation_interfaces
 )
 
 include_directories(include)
 
 add_library(${PROJECT_NAME} SHARED
-  src/coresense_instrumentation_driver/InstrumentationGeneric.cpp
-  src/coresense_instrumentation_driver/InstrumentationImage.cpp
+  src/coresense_instrumentation_driver/InstrumentationProducerGeneric.cpp
+  src/coresense_instrumentation_driver/InstrumentationProducerImage.cpp
+  src/coresense_instrumentation_driver/InstrumentationConsumerGeneric.cpp
 )
 
 ament_target_dependencies(${PROJECT_NAME} ${dependencies})
 
 rclcpp_components_register_nodes(${PROJECT_NAME}
-  "coresense_instrumentation_driver::InstrumentationLifecycleNode<std_msgs::msg::String>"
-  "coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::LaserScan>"
-  "coresense_instrumentation_driver::InstrumentationLifecycleNode<sensor_msgs::msg::Image>"
+  "coresense_instrumentation_driver::InstrumentationProducer<std_msgs::msg::String>"
+  "coresense_instrumentation_driver::InstrumentationProducer<sensor_msgs::msg::LaserScan>"
+  "coresense_instrumentation_driver::InstrumentationProducer<sensor_msgs::msg::Image>"
+  "coresense_instrumentation_driver::InstrumentationProducer<geometry_msgs::msg::Twist>"
+  "coresense_instrumentation_driver::InstrumentationConsumer<std_msgs::msg::String>"
+  "coresense_instrumentation_driver::InstrumentationConsumer<sensor_msgs::msg::LaserScan>"
+  "coresense_instrumentation_driver::InstrumentationConsumer<sensor_msgs::msg::Image>"
+  "coresense_instrumentation_driver::InstrumentationConsumer<geometry_msgs::msg::Twist>"
 )
 
 install(TARGETS
@@ -47,12 +57,7 @@ install(DIRECTORY include/
   DESTINATION include
 )
 
-add_executable(coresense_instrumentation_driver_node src/coresense_instrumentation_driver_node.cpp)
-ament_target_dependencies(coresense_instrumentation_driver_node ${dependencies})
-target_link_libraries(coresense_instrumentation_driver_node ${PROJECT_NAME})
-
 install(TARGETS
-  coresense_instrumentation_driver_node
   DESTINATION lib/${PROJECT_NAME}
 )
 
