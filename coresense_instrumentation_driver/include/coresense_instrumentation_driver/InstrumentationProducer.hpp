@@ -80,6 +80,7 @@ private:
 
   std::string topic_;
   std::string topic_type_;
+  std::string type_;
 };
 
 template<>
@@ -131,6 +132,7 @@ private:
   image_transport::Subscriber sub_;
   std::string topic_;
   std::string topic_type_;
+  std::string type_;
 };
 
 } // namespace coresense_instrumentation_driver
