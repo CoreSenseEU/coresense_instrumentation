@@ -1,0 +1,9 @@
+<library path="coresense_instrumentation_rviz">
+
+  <class name="coresense_instrumentation_rviz/Coresense Instrumentation Panel"
+         type="coresense_instrumentation_rviz::CoresensePanel"
+         base_class_type="rviz_common::Panel">
+    <description>The Nav2 rviz panel.</description>
+  </class>
+
+</library>
