@@ -29,9 +29,11 @@ InstrumentationProducer<TopicT>::InstrumentationProducer(
 {
   declare_parameter("topic", std::string(""));
   declare_parameter("topic_type", std::string(""));
+  declare_parameter("type", std::string(""));
 
   get_parameter("topic", topic_);
   get_parameter("topic_type", topic_type_);
+  get_parameter("type", type_);
 
   status_pub_ = this->create_publisher<coresense_instrumentation_interfaces::msg::NodeInfo>(
     "/status", 10);
@@ -98,7 +100,8 @@ void InstrumentationProducer<TopicT>::publish_status()
 
   std::free(demangled_name);
 
-  status_msg->type = result;
+  status_msg->type_msg = result;
+  status_msg->type = type_;
 
   status_pub_->publish(std::move(status_msg));
 }

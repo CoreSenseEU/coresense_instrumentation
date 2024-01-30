@@ -25,9 +25,11 @@ InstrumentationProducer<sensor_msgs::msg::Image>::InstrumentationProducer(
 {
   declare_parameter("topic", std::string(""));
   declare_parameter("topic_type", std::string(""));
+  declare_parameter("type", std::string(""));
 
   get_parameter("topic", topic_);
   get_parameter("topic_type", topic_type_);
+  get_parameter("type", type_);
 
   node_ = rclcpp::Node::make_shared("subnode");
 
@@ -61,6 +63,29 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::publish_status()
 
   status_msg->state = lifecycle_state.id();
   status_msg->stamp = this->now();
+
+  for (const auto & entry : publishers_) {
+    status_msg->topics.push_back(entry.first);
+  }
+
+  int status;
+  char * demangled_name = abi::__cxa_demangle(typeid(sensor_msgs::msg::Image).name(), nullptr, nullptr, &status);
+  std::string result(demangled_name);
+
+  size_t pos = result.find('<');
+  if (pos != std::string::npos) {
+    result = result.substr(0, pos);
+  }
+
+  size_t last_underscore = result.rfind('_');
+  if (last_underscore != std::string::npos) {
+    result = result.substr(0, last_underscore);
+  }
+
+  std::free(demangled_name);
+
+  status_msg->type_msg = result;
+  status_msg->type = type_;
 
   status_pub_->publish(std::move(status_msg));
 }
