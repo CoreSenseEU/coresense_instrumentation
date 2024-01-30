@@ -70,6 +70,13 @@ protected:
   QTreeWidget * tree_widget_;
   QLabel * label_info_;
   QTabWidget * tab_widget_;
+  QPushButton * button_activate_;
+  QPushButton * button_deactivate_;
+  QPushButton * button_create_;
+  QPushButton * button_delete_;
+  QLineEdit * line_edit_topic_;
+  QTreeWidget * topic_box_;
+  QLabel * type_label_;
 
 private slots:
   void show_info(QTreeWidgetItem * item);
@@ -85,6 +92,7 @@ private:
   void create_subscriber(const std::string & node_name, const std::string & topic_name);
   void delete_publisher(const std::string & node_name, const std::string & topic_name);
   void delete_subscriber(const std::string & node_name, const std::string & topic_name);
+  void create_node_layout();
 
   rclcpp::Node::SharedPtr node_;
   rclcpp::Subscription<coresense_instrumentation_interfaces::msg::NodeInfo>::SharedPtr status_sub_;
