@@ -19,21 +19,35 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
 
-    names = ['scan_raw', 'nav_vel', 'image_raw']
-    topics = ['/scan_raw', '/nav_vel', '/head_front_camera/rgb/image_raw']
-    msgs = ['sensor_msgs::msg::LaserScan', 'geometry_msgs::msg::Twist', 'sensor_msgs::msg::Image']
-    node_types = ['Producer', 'Consumer', 'Producer']
+    names = ['scan_raw',
+             'nav_vel',
+             'image_raw']
+
+    topics = ['/scan_raw',
+              '/nav_vel',
+              '/head_front_camera/rgb/image_raw']
+
+    msgs = ['sensor_msgs::msg::LaserScan',
+            'geometry_msgs::msg::Twist',
+            'sensor_msgs::msg::Image']
+
+    node_types = ['Producer',
+                  'Consumer',
+                  'Producer']
+
     ns = ''
 
     composable_nodes = []
-    for topic, msg, name, type in zip(topics, msgs, names, node_types):
+    for topic, msg, name, node_type in zip(topics, msgs, names, node_types):
         composable_node = ComposableNode(
             package='coresense_instrumentation_driver',
-            plugin='coresense_instrumentation_driver::Instrumentation' + type + '<'
-                    + msg + '>',
+            plugin='coresense_instrumentation_driver::Instrumentation'
+                    + node_type + '<' + msg + '>',
             name=name + '_node',
             namespace=ns,
-            parameters=[{'topic': topic, 'topic_type': msg, 'type': type}],
+            parameters=[{'topic': topic,
+                         'topic_type': msg,
+                         'type': node_type}],
         )
         composable_nodes.append(composable_node)
 
