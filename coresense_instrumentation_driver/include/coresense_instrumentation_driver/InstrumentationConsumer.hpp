@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef INSTRUMENTATION_PRODUCER_HPP
-#define INSTRUMENTATION_PRODUCER_HPP
+#ifndef INSTRUMENTATION_CONSUMER_HPP
+#define INSTRUMENTATION_CONSUMER_HPP
 
 #include "rclcpp/rclcpp.hpp"
 #include "rclcpp_lifecycle/lifecycle_node.hpp"
@@ -87,4 +87,4 @@ private:
 
 } // namespace coresense_instrumentation_driver
 
-#endif // INSTRUMENTATION_PRODUCER_HPP
+#endif // INSTRUMENTATION_CONSUMER_HPP
