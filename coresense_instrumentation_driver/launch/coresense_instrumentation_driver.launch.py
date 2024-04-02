@@ -19,10 +19,10 @@ from launch_ros.descriptions import ComposableNode
 
 def generate_launch_description():
 
-    names = ['scan_raw', 'nav_vel']
-    topics = ['/scan_raw', '/nav_vel']
-    msgs = ['sensor_msgs::msg::LaserScan', 'geometry_msgs::msg::Twist']
-    node_types = ['Consumer', 'Consumer']
+    names = ['scan_raw', 'nav_vel', 'image_raw']
+    topics = ['/scan_raw', '/nav_vel', '/head_front_camera/rgb/image_raw']
+    msgs = ['sensor_msgs::msg::LaserScan', 'geometry_msgs::msg::Twist', 'sensor_msgs::msg::Image']
+    node_types = ['Producer', 'Consumer', 'Producer']
     ns = ''
 
     composable_nodes = []
@@ -33,7 +33,7 @@ def generate_launch_description():
                     + msg + '>',
             name=name + '_node',
             namespace=ns,
-            parameters=[{'topic': topic, 'topic_type': msg}],
+            parameters=[{'topic': topic, 'topic_type': msg, 'type': type}],
         )
         composable_nodes.append(composable_node)
 

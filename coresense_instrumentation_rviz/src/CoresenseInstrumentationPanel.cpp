@@ -71,6 +71,11 @@ CoresensePanel::CoresensePanel(QWidget * parent)
   status_sub_ = node_->create_subscription<coresense_instrumentation_interfaces::msg::NodeInfo>(
     "/status", 10, std::bind(&CoresensePanel::statusCallback, this, std::placeholders::_1));
 
+  alive_timer_ =
+    node_->create_wall_timer(
+    std::chrono::milliseconds(500),
+    std::bind(&CoresensePanel::check_alive, this));
+
   spin_thread_ = std::thread(
     [this]() {
       rclcpp::spin(node_);
@@ -324,6 +329,59 @@ void CoresensePanel::deactivate_node(const std::string & node_name)
 {
   change_state(node_name, lifecycle_msgs::msg::Transition::TRANSITION_DEACTIVATE);
   change_state(node_name, lifecycle_msgs::msg::Transition::TRANSITION_CLEANUP);
+}
+
+void CoresensePanel::check_alive()
+{
+  auto current_time = node_->now();
+
+  for (const auto & entry : time_map_) {
+    const auto & node_name = entry.first;
+    const auto & last_update_time = entry.second;
+
+    auto time_difference = current_time - last_update_time;
+
+    if (time_difference.seconds() > 2) {
+      auto it = std::find(nodes_.begin(), nodes_.end(), node_name);
+
+      if (it != nodes_.end()) {
+        for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i) {
+          QTreeWidgetItem * item = tree_widget_->topLevelItem(i);
+
+          if (item->text(0).toStdString() == node_name) {
+            if (item->foreground(0) != QColor(QColorConstants::Svg::orange)) {
+              item->setBackground(0, QColor(QColorConstants::Svg::orange));
+              item->setBackground(1, QColor(QColorConstants::Svg::orange));
+              item->setBackground(2, QColor(QColorConstants::Svg::orange));
+            }
+
+            break;
+          }
+        }
+      }
+    }
+
+    if (time_difference.seconds() > 5) {
+      auto it = std::find(nodes_.begin(), nodes_.end(), node_name);
+
+      if (it != nodes_.end()) {
+        for (int i = 0; i < tree_widget_->topLevelItemCount(); ++i) {
+          QTreeWidgetItem * item = tree_widget_->topLevelItem(i);
+          if (item->text(0).toStdString() == node_name) {
+            update_state(item, node_name, lifecycle_msgs::msg::State::PRIMARY_STATE_UNKNOWN);
+
+            if (item->foreground(0) != QColor(QColorConstants::Svg::red)) {
+              item->setBackground(0, QColor(QColorConstants::Svg::red));
+              item->setBackground(1, QColor(QColorConstants::Svg::red));
+              item->setBackground(2, QColor(QColorConstants::Svg::red));
+            }
+
+            break;
+          }
+        }
+      }
+    }
+  }
 }
 
 }  // namespace coresense_instrumentation_rviz

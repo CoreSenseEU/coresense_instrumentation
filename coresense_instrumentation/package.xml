@@ -9,7 +9,9 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <depend>coresense_instrumentation_interfaces</depend>
   <depend>coresense_instrumentation_driver</depend>
+  <depend>coresense_instrumentation_rviz</depend>
 
   <export>
     <build_type>ament_cmake</build_type>

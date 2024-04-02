@@ -225,6 +225,12 @@ void InstrumentationConsumer<TopicT>::handleCreateSubscriberRequest(
     new_topic = new_topic.substr(1);
   }
 
+  if (std::string(this->get_namespace()) == "/") {
+    new_topic = std::string("/coresense/" + new_topic);
+  } else {
+    new_topic = std::string(this->get_namespace()) + "/coresense/" + new_topic;
+  }
+
   for (auto & sub : subscriptions_) {
     if (sub.first == new_topic) {
       response->success = false;
@@ -254,8 +260,8 @@ void InstrumentationConsumer<TopicT>::handleDeleteSubscriberRequest(
 
   std::string remove_topic = request->topic_name;
 
-  if (remove_topic[0] == '/') {
-    remove_topic = remove_topic.substr(1);
+  if (remove_topic[0] != '/') {
+    remove_topic = "/" + remove_topic;
   }
 
   for (auto & sub : subscriptions_) {

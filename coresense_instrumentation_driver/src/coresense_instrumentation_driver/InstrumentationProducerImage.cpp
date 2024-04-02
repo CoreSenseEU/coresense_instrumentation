@@ -42,7 +42,7 @@ InstrumentationProducer<sensor_msgs::msg::Image>::InstrumentationProducer(
       publish_status();
     });
 
-  RCLCPP_INFO(get_logger(), "Creating InstrumentationImage");
+  RCLCPP_DEBUG(get_logger(), "Creating InstrumentationImage");
 }
 
 InstrumentationProducer<sensor_msgs::msg::Image>::~InstrumentationProducer()
@@ -54,6 +54,7 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::publish_status()
 {
   auto status_msg = std::make_unique<coresense_instrumentation_interfaces::msg::NodeInfo>();
   auto lifecycle_state = get_current_state();
+  rclcpp::spin_some(node_);
 
   if (std::string(this->get_namespace()) == "/") {
     status_msg->node_name = get_name();
@@ -69,7 +70,8 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::publish_status()
   }
 
   int status;
-  char * demangled_name = abi::__cxa_demangle(typeid(sensor_msgs::msg::Image).name(), nullptr, nullptr, &status);
+  char * demangled_name = abi::__cxa_demangle(
+    typeid(sensor_msgs::msg::Image).name(), nullptr, nullptr, &status);
   std::string result(demangled_name);
 
   size_t pos = result.find('<');
@@ -125,14 +127,20 @@ InstrumentationProducer<sensor_msgs::msg::Image>::on_activate(const rclcpp_lifec
   std::string topic;
   std::string create_service, delete_service;
 
+  if (topic_[0] == '/') {
+    topic_ = topic_.substr(1);
+  }
+
   if (std::string(this->get_namespace()) == "/") {
     create_service = std::string(this->get_name()) + "/create_publisher";
     delete_service = std::string(this->get_name()) + "/delete_publisher";
+    topic = "/coresense/" + topic_;
   } else {
     create_service = std::string(this->get_namespace()) + "/" + this->get_name() +
       "/create_publisher";
     delete_service = std::string(this->get_namespace()) + "/" + this->get_name() +
       "/delete_publisher";
+    topic = std::string(this->get_namespace()) + "/coresense/" + topic_;
   }
 
   auto pub = it.advertise(topic, 1);
@@ -199,6 +207,12 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::handleCreatePublisherRequ
     new_topic = new_topic.substr(1);
   }
 
+  if (std::string(this->get_namespace()) == "/") {
+    new_topic = std::string("/coresense/" + new_topic);
+  } else {
+    new_topic = std::string(this->get_namespace()) + "/coresense/" + new_topic;
+  }
+
   for (auto & pub : publishers_) {
     if (pub.first == new_topic) {
       response->success = false;
@@ -207,7 +221,8 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::handleCreatePublisherRequ
   }
 
   image_transport::ImageTransport it(node_);
-  auto new_pub = it.advertise(std::string(this->get_namespace()) + "/coresense/" + new_topic, 1);
+
+  auto new_pub = it.advertise(new_topic, 1);
   publishers_.insert({new_topic, new_pub});
   response->success = true;
 }
@@ -221,8 +236,8 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::handleDeletePublisherRequ
 
   std::string remove_topic = request->topic_name;
 
-  if (remove_topic[0] == '/') {
-    remove_topic = remove_topic.substr(1);
+  if (remove_topic[0] != '/') {
+    remove_topic = "/" + remove_topic;
   }
 
   publishers_.erase(remove_topic);

@@ -228,6 +228,12 @@ void InstrumentationProducer<TopicT>::handleCreatePublisherRequest(
     new_topic = new_topic.substr(1);
   }
 
+  if (std::string(this->get_namespace()) == "/") {
+    new_topic = std::string("/coresense/" + new_topic);
+  } else {
+    new_topic = std::string(this->get_namespace()) + "/coresense/" + new_topic;
+  }
+
   for (auto & pub : publishers_) {
     if (pub.first == new_topic) {
       response->success = false;
@@ -235,7 +241,7 @@ void InstrumentationProducer<TopicT>::handleCreatePublisherRequest(
     }
   }
 
-  auto new_pub = this->create_publisher<TopicT>("/coresense/" + new_topic, 10);
+  auto new_pub = this->create_publisher<TopicT>(new_topic, 10);
 
   if (this->get_current_state().id() == lifecycle_msgs::msg::State::PRIMARY_STATE_ACTIVE) {
     new_pub->on_activate();
@@ -255,8 +261,8 @@ void InstrumentationProducer<TopicT>::handleDeletePublisherRequest(
 
   std::string remove_topic = request->topic_name;
 
-  if (remove_topic[0] == '/') {
-    remove_topic = remove_topic.substr(1);
+  if (remove_topic[0] != '/') {
+    remove_topic = "/" + remove_topic;
   }
 
   for (auto & pub : publishers_) {
