@@ -1,0 +1,4 @@
+coresense_instrumentation_driver_node:
+  ros__parameters:
+    topics: ["scan", "image"]
+    topic_types: [sensor_msgs/msg/LaserScan, sensor_msgs/msg/Image]
