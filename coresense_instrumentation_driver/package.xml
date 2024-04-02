@@ -2,7 +2,7 @@
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>coresense_instrumentation_driver</name>
-  <version>0.2.0</version>
+  <version>1.0.0</version>
   <description>Coresense Instrumentation Driver</description>
   <maintainer email="jc.manzanares.serrano@gmail.com">Juan Carlos Manzanares Serrano</maintainer>
   <license>Apache-2.0</license>
