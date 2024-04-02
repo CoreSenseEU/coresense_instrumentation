@@ -14,9 +14,10 @@
 
 import os
 
+from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
+
 
 def generate_launch_description():
 
@@ -26,6 +27,8 @@ def generate_launch_description():
             executable='rviz2',
             name='rviz2',
             output='screen',
-            arguments=['-d', os.path.join(get_package_share_directory('coresense_instrumentation_rviz'), 'config', 'coresense_instrumentation.rviz')]
+            arguments=['-d',
+                       os.path.join(get_package_share_directory('coresense_instrumentation_rviz'),
+                                    'config', 'coresense_instrumentation.rviz')]
         )
     ])
