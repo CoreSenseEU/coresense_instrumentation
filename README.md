@@ -11,7 +11,7 @@
 cd ~/ros2_ws/src
 git clone https://github.com/CoreSenseEU/coresense_instrumentation
 cd ~/ros2_ws
-colcon build --symlink-install --packages-up-to coresense_instrumention
+colcon build --symlink-install --packages-up-to coresense_instrumentation
 ```
 
 ## Usage
