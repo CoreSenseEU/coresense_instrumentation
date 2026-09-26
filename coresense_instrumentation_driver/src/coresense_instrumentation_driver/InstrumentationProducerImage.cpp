@@ -197,7 +197,8 @@ std::string InstrumentationProducer<sensor_msgs::msg::Image>::get_topic_type()
 void InstrumentationProducer<sensor_msgs::msg::Image>::handleCreatePublisherRequest(
   const std::shared_ptr<rmw_request_id_t> request_header,
   const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreatePublisher::Request> request,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreatePublisher::Response> response)
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreatePublisher::Response>
+  response)
 {
   (void)request_header;
 
@@ -230,7 +231,8 @@ void InstrumentationProducer<sensor_msgs::msg::Image>::handleCreatePublisherRequ
 void InstrumentationProducer<sensor_msgs::msg::Image>::handleDeletePublisherRequest(
   const std::shared_ptr<rmw_request_id_t> request_header,
   const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeletePublisher::Request> request,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeletePublisher::Response> response)
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeletePublisher::Response>
+  response)
 {
   (void)request_header;
 

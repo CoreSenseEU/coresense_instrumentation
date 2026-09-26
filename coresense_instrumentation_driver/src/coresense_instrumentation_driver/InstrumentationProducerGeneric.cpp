@@ -218,7 +218,8 @@ template<typename TopicT>
 void InstrumentationProducer<TopicT>::handleCreatePublisherRequest(
   const std::shared_ptr<rmw_request_id_t> request_header,
   const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreatePublisher::Request> request,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreatePublisher::Response> response)
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreatePublisher::Response>
+  response)
 {
   (void)request_header;
 
@@ -255,7 +256,8 @@ template<typename TopicT>
 void InstrumentationProducer<TopicT>::handleDeletePublisherRequest(
   const std::shared_ptr<rmw_request_id_t> request_header,
   const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeletePublisher::Request> request,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeletePublisher::Response> response)
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeletePublisher::Response>
+  response)
 {
   (void)request_header;
 

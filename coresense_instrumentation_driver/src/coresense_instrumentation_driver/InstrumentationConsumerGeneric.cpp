@@ -214,8 +214,10 @@ InstrumentationConsumer<TopicT>::on_shutdown(const rclcpp_lifecycle::State &)
 template<typename TopicT>
 void InstrumentationConsumer<TopicT>::handleCreateSubscriberRequest(
   const std::shared_ptr<rmw_request_id_t> request_header,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Request> request,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Response> response)
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Request>
+  request,
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Response>
+  response)
 {
   (void)request_header;
 
@@ -253,8 +255,10 @@ void InstrumentationConsumer<TopicT>::handleCreateSubscriberRequest(
 template<typename TopicT>
 void InstrumentationConsumer<TopicT>::handleDeleteSubscriberRequest(
   const std::shared_ptr<rmw_request_id_t> request_header,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Request> request,
-  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Response> response)
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Request>
+  request,
+  const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Response>
+  response)
 {
   (void)request_header;
 

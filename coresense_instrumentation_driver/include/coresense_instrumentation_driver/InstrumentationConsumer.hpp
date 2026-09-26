@@ -62,13 +62,17 @@ private:
 
   void handleCreateSubscriberRequest(
     const std::shared_ptr<rmw_request_id_t> request_header,
-    const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Request> request,
-    const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Response> response);
+    const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Request>
+    request,
+    const std::shared_ptr<coresense_instrumentation_interfaces::srv::CreateSubscriber::Response>
+    response);
 
   void handleDeleteSubscriberRequest(
     const std::shared_ptr<rmw_request_id_t> request_header,
-    const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Request> request,
-    const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Response> response);
+    const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Request>
+    request,
+    const std::shared_ptr<coresense_instrumentation_interfaces::srv::DeleteSubscriber::Response>
+    response);
 
   void publish_status();
 
