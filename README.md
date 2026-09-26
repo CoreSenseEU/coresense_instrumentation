@@ -1,7 +1,7 @@
 # Coresense Instrumentation
 
-![distro](https://img.shields.io/badge/Ubuntu%2022-Jammy%20Jellyfish-green)
-![distro](https://img.shields.io/badge/ROS2-Humble-blue)
+![distro](https://img.shields.io/badge/Ubuntu%2024.04-Noble-green)
+![distro](https://img.shields.io/badge/ROS2-Jazzy%20%7C%20Kilted-blue)
 [![main](https://github.com/CoreSenseEU/coresense_instrumentation/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/CoreSenseEU/coresense_instrumentation/actions/workflows/main.yaml)
 
 ## Installation
