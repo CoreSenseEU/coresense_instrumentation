@@ -2,8 +2,7 @@
 
 ![distro](https://img.shields.io/badge/Ubuntu%2022-Jammy%20Jellyfish-green)
 ![distro](https://img.shields.io/badge/ROS2-Humble-blue)
-[![main](https://github.com/Juancams/coresense_instrumentation/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/Juancams/coresense_instrumentation/actions/workflows/main.yaml)
-[![codecov](https://codecov.io/gh/Juancams/coresense_instrumentation/graph/badge.svg?token=EvUIoImzzh)](https://codecov.io/gh/Juancams/coresense_instrumentation)
+[![main](https://github.com/CoreSenseEU/coresense_instrumentation/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/CoreSenseEU/coresense_instrumentation/actions/workflows/main.yaml)
 
 ## Installation
 
@@ -88,3 +87,9 @@ When you launch rviz, you will see on your right a panel like this, but with you
 
 ## Demo
 [instrumentation_driver_demo](https://github.com/Juancams/coresense_instrumentation/assets/44479765/e6cada5c-5071-4a41-b226-5dc5c18a37aa)
+
+## Acknowledgement
+
+<img src="https://github.com/user-attachments/assets/b11da974-9201-4f79-902e-c9c20e8aa7a4" alt="Funded by the European Union" width="240"/>
+
+This work has received funding from the European Union's Horizon Europe research and innovation programme under grant agreement No 101070254 ([CORESENSE](https://coresense.eu)). Views and opinions expressed are however those of the author(s) only and do not necessarily reflect those of the European Union or the European Commission. Neither the European Union nor the granting authority can be held responsible for them.
