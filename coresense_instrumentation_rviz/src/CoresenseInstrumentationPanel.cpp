@@ -62,9 +62,7 @@ CoresensePanel::CoresensePanel(QWidget * parent)
 
   create_node_layout();
 
-  connect(
-    tree_widget_, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this,
-    SLOT(show_info(QTreeWidgetItem*)));
+  connect(tree_widget_, &QTreeWidget::itemClicked, this, &CoresensePanel::show_info);
 
   setLayout(layout_);
 

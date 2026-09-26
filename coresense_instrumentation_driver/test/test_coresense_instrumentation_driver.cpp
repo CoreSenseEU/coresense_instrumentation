@@ -223,16 +223,21 @@ TEST_F(IntegrationTest, CreateStringPublisher)
     std::make_shared<coresense_instrumentation_interfaces::srv::CreatePublisher::Response>();
   request->topic_name = "/new_test_topic";
 
+  bool received = false;
   client->async_send_request(
     request,
-    [&response](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreatePublisher>::
+    [&response,
+    &received](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreatePublisher>::
     SharedFuture future) {
       if (future.get()) {
         response = future.get();
       }
+      received = true;
     });
 
-  for (int i = 0; i < 10; i++) {
+  // Wait for the response: service discovery time depends on the machine
+  auto start = std::chrono::steady_clock::now();
+  while (!received && std::chrono::steady_clock::now() - start < std::chrono::seconds(10)) {
     executor.spin_once(std::chrono::milliseconds(100));
   }
 
@@ -269,16 +274,21 @@ TEST_F(IntegrationTest, DeleteStringPublisher)
     std::make_shared<coresense_instrumentation_interfaces::srv::CreatePublisher::Response>();
   request_create->topic_name = "/new_test_topic";
 
+  bool received_create = false;
   client_create->async_send_request(
     request_create,
-    [&response_create](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreatePublisher>::
+    [&response_create,
+    &received_create](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreatePublisher>::
     SharedFuture future) {
       if (future.get()) {
         response_create = future.get();
       }
+      received_create = true;
     });
 
-  for (int i = 0; i < 10; i++) {
+  // Wait for the response: service discovery time depends on the machine
+  auto start = std::chrono::steady_clock::now();
+  while (!received_create && std::chrono::steady_clock::now() - start < std::chrono::seconds(10)) {
     executor.spin_once(std::chrono::milliseconds(100));
   }
 
@@ -296,16 +306,21 @@ TEST_F(IntegrationTest, DeleteStringPublisher)
 
   request_delete->topic_name = "/coresense/new_test_topic";
 
+  bool received_delete = false;
   client_delete->async_send_request(
     request_delete,
-    [&response_delete](rclcpp::Client<coresense_instrumentation_interfaces::srv::DeletePublisher>::
+    [&response_delete,
+    &received_delete](rclcpp::Client<coresense_instrumentation_interfaces::srv::DeletePublisher>::
     SharedFuture future) {
       if (future.get()) {
         response_delete = future.get();
       }
+      received_delete = true;
     });
 
-  for (int i = 0; i < 10; i++) {
+  // Wait for the response: service discovery time depends on the machine
+  start = std::chrono::steady_clock::now();
+  while (!received_delete && std::chrono::steady_clock::now() - start < std::chrono::seconds(10)) {
     executor.spin_once(std::chrono::milliseconds(100));
   }
 
@@ -342,16 +357,21 @@ TEST_F(IntegrationTest, CreateTwistSubscription)
     std::make_shared<coresense_instrumentation_interfaces::srv::CreateSubscriber::Response>();
   request->topic_name = "/new_test_topic";
 
+  bool received = false;
   client->async_send_request(
     request,
-    [&response](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreateSubscriber>::
+    [&response,
+    &received](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreateSubscriber>::
     SharedFuture future) {
       if (future.get()) {
         response = future.get();
       }
+      received = true;
     });
 
-  for (int i = 0; i < 10; i++) {
+  // Wait for the response: service discovery time depends on the machine
+  auto start = std::chrono::steady_clock::now();
+  while (!received && std::chrono::steady_clock::now() - start < std::chrono::seconds(10)) {
     executor.spin_once(std::chrono::milliseconds(100));
   }
 
@@ -388,16 +408,21 @@ TEST_F(IntegrationTest, DeleteTwistSubscription)
     std::make_shared<coresense_instrumentation_interfaces::srv::CreateSubscriber::Response>();
   request_create->topic_name = "/new_test_topic";
 
+  bool received_create = false;
   client_create->async_send_request(
     request_create,
-    [&response_create](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreateSubscriber>::
+    [&response_create,
+    &received_create](rclcpp::Client<coresense_instrumentation_interfaces::srv::CreateSubscriber>::
     SharedFuture future) {
       if (future.get()) {
         response_create = future.get();
       }
+      received_create = true;
     });
 
-  for (int i = 0; i < 10; i++) {
+  // Wait for the response: service discovery time depends on the machine
+  auto start = std::chrono::steady_clock::now();
+  while (!received_create && std::chrono::steady_clock::now() - start < std::chrono::seconds(10)) {
     executor.spin_once(std::chrono::milliseconds(100));
   }
 
@@ -415,16 +440,21 @@ TEST_F(IntegrationTest, DeleteTwistSubscription)
 
   request_delete->topic_name = "/coresense/new_test_topic";
 
+  bool received_delete = false;
   client_delete->async_send_request(
     request_delete,
-    [&response_delete](rclcpp::Client<coresense_instrumentation_interfaces::srv::DeleteSubscriber>::
+    [&response_delete,
+    &received_delete](rclcpp::Client<coresense_instrumentation_interfaces::srv::DeleteSubscriber>::
     SharedFuture future) {
       if (future.get()) {
         response_delete = future.get();
       }
+      received_delete = true;
     });
 
-  for (int i = 0; i < 10; i++) {
+  // Wait for the response: service discovery time depends on the machine
+  start = std::chrono::steady_clock::now();
+  while (!received_delete && std::chrono::steady_clock::now() - start < std::chrono::seconds(10)) {
     executor.spin_once(std::chrono::milliseconds(100));
   }
 
