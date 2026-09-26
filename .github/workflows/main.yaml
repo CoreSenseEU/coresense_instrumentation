@@ -1,36 +1,32 @@
 name: main
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
-      - '*'
+      - main
+  workflow_dispatch:
 
 jobs:
-  ROS2:
-    runs-on: ubuntu-22.04
+  build-and-test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        ros_distro: [jazzy, kilted]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup ROS 2 environment
-        uses: ros-tooling/setup-ros@0.7.0
+      - uses: ros-tooling/setup-ros@0.7.19
         with:
-          ros-distro: humble
-
-      - name: Build ROS 2 package
-        uses: ros-tooling/action-ros-ci@v0.3
+          required-ros-distributions: ${{ matrix.ros_distro }}
+      - uses: ros-tooling/action-ros-ci@0.4.8
         with:
-          package-name: coresense_instrumentation_driver coresense_instrumentation_interfaces
-          target-ros2-distro: humble
+          package-name: coresense_instrumentation coresense_instrumentation_driver coresense_instrumentation_interfaces coresense_instrumentation_rviz
+          target-ros2-distro: ${{ matrix.ros_distro }}
           colcon-defaults: |
             {
-              "build": {
-                "mixin": ["coverage-gcc"]
+              "test": {
+                "parallel-workers" : 1
               }
             }
-          colcon-mixin-repository: https://raw.githubusercontent.com/colcon/colcon-mixin-repository/1ddb69bedfd1f04c2f000e95452f7c24a4d6176b/index.yaml
-
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v3
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
