@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#ifndef CORESENSE_INSTRUMENTATION_RVIZ__CORESENSE_INSTRUMENTATION_PANEL_HPP_
-#define CORESENSE_INSTRUMENTATION_RVIZ__CORESENSE_INSTRUMENTATION_PANEL_HPP_
+#ifndef CORESENSE_INSTRUMENTATION_RVIZ__CORESENSEINSTRUMENTATIONPANEL_HPP_
+#define CORESENSE_INSTRUMENTATION_RVIZ__CORESENSEINSTRUMENTATIONPANEL_HPP_
 
 #include <QtWidgets>
 #include <QLabel>
@@ -32,6 +32,7 @@
 
 #undef NO_ERROR
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -106,4 +107,4 @@ private:
 
 }  // namespace coresense_instrumentation_rviz
 
-#endif  //  CORESENSE_INSTRUMENTATION_RVIZ__CORESENSE_INSTRUMENTATION_PANEL_HPP_
+#endif  // CORESENSE_INSTRUMENTATION_RVIZ__CORESENSEINSTRUMENTATIONPANEL_HPP_
